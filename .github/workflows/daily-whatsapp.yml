@@ -1,0 +1,65 @@
+name: Daily WhatsApp Message (Multiple Free Options)
+
+on:
+  schedule:
+    - cron: "30 4 * * *" # 10:00 AM IST (4:30 UTC)
+  workflow_dispatch: # Run manually anytime
+
+jobs:
+  send-whatsapp-ultramsg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send WhatsApp via UltraMsg (Free 7 days)
+        run: |
+          INSTANCE_ID="${{ secrets.ULTRAMSG_INSTANCE_ID }}"
+          TOKEN="${{ secrets.ULTRAMSG_TOKEN }}"
+          PHONE="917528940605"
+          
+          MESSAGE="🌅 Good morning! $(date '+%A, %B %d, %Y') - Your daily reminder via UltraMsg! 💪"
+          
+          echo "📱 Sending WhatsApp via UltraMsg to +$PHONE"
+          
+          curl -X POST "https://api.ultramsg.com/$INSTANCE_ID/messages/chat" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "token=$TOKEN" \
+            -d "to=$PHONE" \
+            -d "body=$MESSAGE"
+
+  send-whatsapp-wati:
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Send WhatsApp via WATI (Free tier)
+        run: |
+          API_KEY="${{ secrets.WATI_API_KEY }}"
+          PHONE="917528940605"
+          
+          MESSAGE="🌅 Good morning! $(date '+%A, %B %d, %Y') - Your daily reminder via WATI! 💪"
+          
+          echo "📱 Sending WhatsApp via WATI to +$PHONE"
+          
+          curl -X POST "https://live-server-113452.wati.io/api/v1/sendSessionMessage/$PHONE" \
+            -H "Authorization: Bearer $API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"messageText\": \"$MESSAGE\"}"
+
+  send-whatsapp-green-api:
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Send WhatsApp via Green-API (Free tier)
+        run: |
+          INSTANCE_ID="${{ secrets.GREEN_API_INSTANCE_ID }}"
+          API_TOKEN="${{ secrets.GREEN_API_TOKEN }}"
+          PHONE="917528940605"
+          
+          MESSAGE="🌅 Good morning! $(date '+%A, %B %d, %Y') - Your daily reminder via Green-API! 💪"
+          
+          echo "📱 Sending WhatsApp via Green-API to +$PHONE"
+          
+          curl -X POST "https://api.green-api.com/waInstance$INSTANCE_ID/sendMessage/$API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chatId\": \"$PHONE@c.us\",
+              \"message\": \"$MESSAGE\"
+            }"

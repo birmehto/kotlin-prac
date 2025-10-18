@@ -1,5 +1,4 @@
 # 🚀 Complete Kotlin Multiplatform & Compose Learning Guide
-*From Zero to KMP Hero in 30 Days*
 
 ## 📋 How to Use This Guide
 

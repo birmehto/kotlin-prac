@@ -1,0 +1,48 @@
+name: WhatsApp via Twilio Sandbox (Free)
+
+on:
+  schedule:
+    - cron: "30 4 * * *" # 10:00 AM IST
+  workflow_dispatch:
+
+jobs:
+  send-whatsapp-twilio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install Twilio
+        run: pip install twilio
+      
+      - name: Send WhatsApp via Twilio Sandbox
+        run: |
+          python3 << 'EOF'
+          from twilio.rest import Client
+          import os
+          from datetime import datetime
+          
+          # Twilio credentials (free sandbox)
+          account_sid = "${{ secrets.TWILIO_ACCOUNT_SID }}"
+          auth_token = "${{ secrets.TWILIO_AUTH_TOKEN }}"
+          
+          client = Client(account_sid, auth_token)
+          
+          # Your WhatsApp number (must be verified in Twilio sandbox)
+          to_number = "whatsapp:+917528940605"
+          from_number = "whatsapp:+14155238886"  # Twilio sandbox number
+          
+          message_body = f"🌅 Good morning! {datetime.now().strftime('%A, %B %d, %Y')} - Your daily Twilio reminder! 💪"
+          
+          try:
+              message = client.messages.create(
+                  body=message_body,
+                  from_=from_number,
+                  to=to_number
+              )
+              print(f"✅ Message sent successfully! SID: {message.sid}")
+          except Exception as e:
+              print(f"❌ Error: {e}")
+          EOF

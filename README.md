@@ -36,8 +36,8 @@
 
 ### 📅 Day 1-2: Kotlin Basics
 **What to learn:**
-- [ ] Variables (val, var)
-- [ ] Data types (String, Int, Double, Boolean)
+- [X] Variables (val, var)
+- [X] Data types (String, Int, Double, Boolean)
 - [ ] Collections (List, Set, Map, Array)
 - [ ] Control flow (if/else, when, loops)
 - [ ] Functions and parameters
